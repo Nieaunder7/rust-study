@@ -1,30 +1,21 @@
-
 use std::io;
-use rand::Rng;
-use std::cmp::Ordering;
+
+fn fib(term: u32, val: u32, prev: u32) -> u32 {
+    if term == 0 {
+        return prev;
+    } else {
+        return fib(term - 1, val+prev , val);
+    }
+}
 
 fn main() {
-   println!("숫자를 예측하세요!");  // 느낌표가 약간 괴롭다..
-   let secret_number = rand::thread_rng().gen_range(1..=100);
-//    println!("The secret number is: {secret_number}");
-   let mut _try_cnt: u32 = 0;
-   loop {
-       println!("당신의 예측 숫자을 입력해주세요:");
-       let mut guess = String::new();               
-       let _ = io::stdin().read_line(&mut guess).expect("값을 읽는데 실패했습니다!");
-       let guess: u32 = match guess.trim().parse() {
-           Ok(num) => num,
-           Err(_) => continue,
-       };
-       println!("당신의 예측 숫자는: {guess}");
-       match guess.cmp(&secret_number) {
-           Ordering::Less => println!("Too small!"),
-           Ordering::Greater => println!("Too big!"),
-           Ordering::Equal => {
-               println!("You win! {}번 만에 맞췄습니다!", _try_cnt);
-               break;
-           },
-       }
-       _try_cnt += 1;
-   }
+    let mut guess = String::new();
+    let _ = io::stdin()
+        .read_line(&mut guess)
+        .expect("값을 읽는데 실패했습니다!");
+    let idx: u32 = match guess.trim().parse() {
+        Ok(num) => num,
+        Err(_) => return println!("0"),
+    };
+    println!("{}", fib(idx, 1, 0));
 }
